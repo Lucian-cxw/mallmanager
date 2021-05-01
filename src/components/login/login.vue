@@ -29,15 +29,17 @@ export default {
         }     
     },
     methods:{
-        handleLogin(){
+          /* 
+          handleLogin(){
+         
             // 因为在http.js中设置了基准url，所以一下面路径可以写login不用补全
             this.$http.post("login",this.formdata)
             .then((res)=>{  
                 const {status,data}=res       
-                /*
-                    const {data,meta:{msg,status}}=res.data
-                    选择不清楚如何设置meta，以后再说
-                */ 
+              
+                    // const {data,meta:{msg,status}}=res.data
+                    // 选择不清楚如何设置meta，以后再说
+              
                if(status===201){
                     // console.log(data)
                     // 1跳转home页面
@@ -48,8 +50,30 @@ export default {
                     this.$message.warning('登录失败');
                }
               
-            }) 
+            })        
         }
+        */  
+        // await +async 同步化异步代码
+        async handleLogin(){
+           const res = await this.$http.post("login",this.formdata)
+            
+            // const {data,meta:{msg,status}}=res.data  
+            // 说明，先造以下两假数据，他们本该来源于后台
+             var msg1="登录成功，假数据" 
+             var msg2="登录失败，假数据"   
+
+             var status=200
+
+            console.log(status)
+            if(status===201){
+                this.$router.push({name:"home"})
+                    this.$message.success(msg1);
+            } else{
+                this.$message.warning(msg2);
+            }
+                  
+        }
+         
     },
 }
 </script>
