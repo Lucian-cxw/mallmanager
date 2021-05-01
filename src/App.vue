@@ -21,6 +21,6 @@ export default {
   margin-top: 60px; 
   
   不用代码，删掉*/
-  
+  height: 100%;
 }
 </style>
