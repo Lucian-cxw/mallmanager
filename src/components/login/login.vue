@@ -41,7 +41,7 @@ export default {
                if(status===201){
                     // console.log(data)
                     // 1跳转home页面
-                    // this.router.push({name:"home"})
+                    this.$router.push({name:"home"})
                 // 2如果输入错误账号密码，给出提醒
                      this.$message.success('登录成功');
                } else{

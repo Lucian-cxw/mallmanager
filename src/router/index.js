@@ -6,6 +6,7 @@ import Router from 'vue-router'
 // import Login from "../components/login/login.vue"  这样写没问题
 //  以下写法为webpack 提供的@ 可以直接找到SRC文件夹
 import Login from "@/components/login/login.vue" 
+import Home from "@/components/home/home.vue" 
 
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ export default new Router({
       name:"login",
       path:"/login",
       component:Login     
+    },
+    {
+      name:"home",
+      path:"/",
+      component:Home   
     }
   ]
 })
