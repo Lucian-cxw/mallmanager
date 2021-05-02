@@ -17,10 +17,10 @@
             </el-col>
         </el-row>
     </el-header>
-    <el-container>
+    <el-container> 
         <!-- 侧边栏导航组件 -->
         <el-aside class="aside" width="200px">
-            <el-menu unique-opened="true">
+            <el-menu :unique-opened="true">
                 <!-- 1 -->
                 <el-submenu index="1">
                       <!-- <template slot="title">分组一</template> -->
@@ -94,6 +94,18 @@
 
 <script>
 export default {
+    beforeCreate() {
+        /*
+            判断是否具有token值，有则渲染组件，无则返回登录页面验证
+            因此，在判断的时候，组件没渲染，需要写在mounted 之前的生命周期函数中
+        */ 
+       const token=localStorage.getItem("token")
+       if(!token){
+           this.$router.push({name:"login"})
+       }
+    },
+    
+
 
 }
 </script>
