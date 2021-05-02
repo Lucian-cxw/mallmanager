@@ -70,7 +70,7 @@ export default {
            data.token="00000"//假数据，用于测试，后台传递的值
             // 说明，先造以下两假数据，他们本该来源于后台
             data.msg1="登录成功，假数据" 
-            data.msg0="登录失败，假数据"   
+            data.msg0="登录失败，假数据"    
             var status=201
 
             console.log(status,data.token)
