@@ -12,7 +12,9 @@
             </el-col>
             <el-col :span="2">
                 <div class="grid-content bg-purple">
-                    <a href="#" class="loginout">退出</a>
+                    <!-- <a href="#" class="loginout">退出</a> -->
+                    <a  href="#" class="loginout" @click="handleSigout()">退出</a>
+
                 </div>
             </el-col>
         </el-row>
@@ -103,6 +105,16 @@ export default {
        if(!token){
            this.$router.push({name:"login"})
        }
+    },
+    methods: {
+        handleSigout(){
+            // 1清除token
+            localStorage.clear()
+            // 2提示退出
+            this.message.success("退出成功")
+            // 3跳转到login页面
+            this.$router.push({name:"login"})
+        }
     },
     
 
