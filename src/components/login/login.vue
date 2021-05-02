@@ -58,18 +58,29 @@ export default {
            const res = await this.$http.post("login",this.formdata)
             
             // const {data,meta:{msg,status}}=res.data  
+           
+             class Data{
+                //  假数据，用来代替后台返回的token值
+                 constructor(token){
+                     this.token=token
+                 }
+             }
+
+            var data=new Data()
+           data.token="00000"//假数据，用于测试，后台传递的值
             // 说明，先造以下两假数据，他们本该来源于后台
-             var msg1="登录成功，假数据" 
-             var msg2="登录失败，假数据"   
+            data.msg1="登录成功，假数据" 
+            data.msg0="登录失败，假数据"   
+            var status=201
 
-             var status=200
-
-            console.log(status)
+            console.log(status,data.token)
             if(status===201){
+                // 跳转页面前，下保存token值
+                localStorage.setItem("token",data.token)
                 this.$router.push({name:"home"})
-                    this.$message.success(msg1);
+                    this.$message.success(data.msg1);
             } else{
-                this.$message.warning(msg2);
+                this.$message.warning(data.msg0);
             }
                   
         }
