@@ -111,7 +111,7 @@ export default {
             // 1清除token
             localStorage.clear()
             // 2提示退出
-            this.message.success("退出成功")
+             this.$message.success("退出成功")
             // 3跳转到login页面
             this.$router.push({name:"login"})
         }

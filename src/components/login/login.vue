@@ -78,7 +78,7 @@ export default {
                 // 跳转页面前，下保存token值
                 localStorage.setItem("token",data.token)
                 this.$router.push({name:"home"})
-                    this.$message.success(data.msg1);
+                      this.$message.success(data.msg1)
             } else{
                 this.$message.warning(data.msg0);
             }
