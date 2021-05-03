@@ -17,7 +17,7 @@
     </el-row>
     <!-- 3表格 -->
     <el-table :data="userlist" style="width: 100%">
-        <el-table-column type="index"  label="#" width="60">
+        <el-table-column type="index" label="#" width="60">
         </el-table-column>
         <el-table-column prop="username" label="姓名" width="80">
         </el-table-column>
@@ -34,13 +34,22 @@
                         数组的row属性表示数组中的每一个对象
                     3使用表达式 {{userlist.row.create_time|fmtdate}}
             -->
-            <template slot-scope=" userlist"> 
+            <template slot-scope=" userlist">
                 {{userlist.row.create_time|fmtdate}}
             </template>
         </el-table-column>
-        <el-table-column prop="mg_state" label="用户状态">
+        <el-table-column label="用户状态">
+            <template slot-scope="scope">
+                <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949">
+                </el-switch>
+            </template>
         </el-table-column>
-        <el-table-column prop="" label="操作">
+        <el-table-column label="操作">
+            <template  slot-scope="" >
+                <el-button size="mini" plain type="primary" icon="el-icon-edit" circle></el-button>
+                <el-button size="mini" plain type="danger" icon="el-icon-delete" circle></el-button>
+                <el-button size="mini" plain type="success" icon="el-icon-check" circle></el-button>
+            </template>
         </el-table-column>
     </el-table>
     <!-- 4 分页-->
@@ -53,52 +62,51 @@ export default {
         return {
             query: "",
             // 以下用于接受后台返回的数据
-           userlist: [],
-           pageNum:1,
-           pageSize:2,
-           tatol:-1
+            userlist: [],
+            pageNum: 1,
+            pageSize: 2,
+            tatol: -1
         }
-        
+
     },
-  created() {
-    //   也可以用mounted方法
-    this.getUserList()
-  },
+    created() {
+        //   也可以用mounted方法
+        this.getUserList()
+    },
     methods: {
-        async getUserList(){
+        async getUserList() {
             /*
             请求数据
                 query 查询参数 可以为空
                 pageNum 当前页码 不能为空
                 pageSize 每页显示条数 不能为空
                 设置请求头
-            */ 
-           const AUTH_TOKEN=localStorage.getItem("token")
-           this.$http.defaults.headers.common["Authorization"]=AUTH_TOKEN
-           const res=await this.$http.get(`users?query=${this.query}&pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
-        //    console.log(res.data)
-           
-        //    const {meta:{staus,msg},data:{users,total}}=res.data
+            */
+            const AUTH_TOKEN = localStorage.getItem("token")
+            this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN
+            const res = await this.$http.get(`users?query=${this.query}&pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
+            //    console.log(res.data)
 
-// 以下5个为假数据
-        var status=200
-        var users=res.data
-        var total=3
-        var msg0="获取数据库失败"
-        var msg1="获取数据库成功"
+            //    const {meta:{staus,msg},data:{users,total}}=res.data
 
+            // 以下5个为假数据
+            var status = 200
+            var users = res.data
+            var total = 3
+            var msg0 = "获取数据库失败"
+            var msg1 = "获取数据库成功"
 
-           if(status===200){
-            //    1.给表格赋值
-                this.userlist=users
-            //  2 给total 赋值
-            this.total=total
-            // 3提示
+            if (status === 200) {
+                //    1.给表格赋值
+                this.userlist = users
+                //  2 给total 赋值
+                this.total = total
+                // 3提示
                 this.$message.success(msg1)
-           }else{
-            //    提示
+            } else {
+                //    提示
                 this.$message.warning(msg0)
-           }
+            }
         }
     },
 }
