@@ -45,7 +45,7 @@
             </template>
         </el-table-column>
         <el-table-column label="操作">
-            <template  slot-scope="" >
+            <template slot-scope="">
                 <el-button size="mini" plain type="primary" icon="el-icon-edit" circle></el-button>
                 <el-button size="mini" plain type="danger" icon="el-icon-delete" circle></el-button>
                 <el-button size="mini" plain type="success" icon="el-icon-check" circle></el-button>
@@ -53,6 +53,10 @@
         </el-table-column>
     </el-table>
     <!-- 4 分页-->
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" 
+    :current-page="pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="2" 
+    layout="total, sizes, prev, pager, next, jumper" :total="total">
+    </el-pagination>
 </el-card>
 </template>
 
@@ -63,9 +67,9 @@ export default {
             query: "",
             // 以下用于接受后台返回的数据
             userlist: [],
-            pageNum: 1,
-            pageSize: 2,
-            tatol: -1
+            pagenum: 1,
+            pagesize: 2,
+            tatol: 32
         }
 
     },
@@ -74,6 +78,13 @@ export default {
         this.getUserList()
     },
     methods: {
+        // 分页相关的两个方法
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+        },
         async getUserList() {
             /*
             请求数据
@@ -92,7 +103,8 @@ export default {
             // 以下5个为假数据
             var status = 200
             var users = res.data
-            var total = 3
+             var total1= 32
+             
             var msg0 = "获取数据库失败"
             var msg1 = "获取数据库成功"
 
@@ -100,7 +112,7 @@ export default {
                 //    1.给表格赋值
                 this.userlist = users
                 //  2 给total 赋值
-                this.total = total
+                this.total = total1
                 // 3提示
                 this.$message.success(msg1)
             } else {
