@@ -16,20 +16,31 @@
         </el-col>
     </el-row>
     <!-- 3表格 -->
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="userlist" style="width: 100%">
         <el-table-column type="index"  label="#" width="60">
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="80">
+        <el-table-column prop="username" label="姓名" width="80">
         </el-table-column>
         <el-table-column prop="email" label="邮箱">
         </el-table-column>
-        <el-table-column prop="phone" label="电话">
+        <el-table-column prop="mobile" label="电话">
         </el-table-column>
-        <el-table-column prop="email" label="创建时间">
+        <el-table-column label="创建时间">
+            <!-- temolate内部要使用数据，设置 slot-scope=""
+                该属性的值要是create_time 的数据源，即userlist数组，也可医用scope代替，相当于形参
+                前提：
+                    1想在el栅格中插入一个非字符串数据，如插值表达式，先用小容器template包住
+                    2 由于不同组件的数据不共享，有独立的作用域，因此通过slot-scope="数据源" 属性传值，
+                        数组的row属性表示数组中的每一个对象
+                    3使用表达式 {{userlist.row.create_time|fmtdate}}
+            -->
+            <template slot-scope=" userlist"> 
+                {{userlist.row.create_time|fmtdate}}
+            </template>
         </el-table-column>
-        <el-table-column prop="email" label="用户状态">
+        <el-table-column prop="mg_state" label="用户状态">
         </el-table-column>
-        <el-table-column prop="email" label="操作">
+        <el-table-column prop="" label="操作">
         </el-table-column>
     </el-table>
     <!-- 4 分页-->
@@ -41,26 +52,11 @@ export default {
     data() {
         return {
             query: "",
-            // 以下两条为假数据，本来是后台传递的值
-            pageNum:1,
-            pageSize:3,
-            tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-        }]
+            // 以下用于接受后台返回的数据
+           userlist: [],
+           pageNum:1,
+           pageSize:2,
+           tatol:-1
         }
         
     },
@@ -80,7 +76,29 @@ export default {
            const AUTH_TOKEN=localStorage.getItem("token")
            this.$http.defaults.headers.common["Authorization"]=AUTH_TOKEN
            const res=await this.$http.get(`users?query=${this.query}&pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
-           console.log(res)
+        //    console.log(res.data)
+           
+        //    const {meta:{staus,msg},data:{users,total}}=res.data
+
+// 以下5个为假数据
+        var status=200
+        var users=res.data
+        var total=3
+        var msg0="获取数据库失败"
+        var msg1="获取数据库成功"
+
+
+           if(status===200){
+            //    1.给表格赋值
+                this.userlist=users
+            //  2 给total 赋值
+            this.total=total
+            // 3提示
+                this.$message.success(msg1)
+           }else{
+            //    提示
+                this.$message.warning(msg0)
+           }
         }
     },
 }

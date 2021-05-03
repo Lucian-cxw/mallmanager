@@ -9,12 +9,20 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import "@/assets/css/reset.css"
 
+// 导入moment 包
+import moment from "moment"
+
 Vue.use(ElementUI)
 Vue.use(MyHttpServer)
 
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+
+// 编写全局过滤器，处理日期格式
+Vue.filter("fmtdate",(v)=>{
+    return moment(v).format('YYYY-MM-DD')
+})
 new Vue({
   el: '#app',
   router,
