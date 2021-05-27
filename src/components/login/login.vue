@@ -57,18 +57,16 @@ export default {
         async handleLogin(){
            const res = await this.$http.post("login",this.formdata)
             
-            const {data,meta={msg,status}}=res.data
-            console.log(data,meta)
-            console.log(meta.msg)
-            console.log(meta.status)
+            const {data:{token},meta:{msg,status}}=res.data
+            
 
-            if(meta.status===201){
+            if(status===201){
                 // 跳转页面前，下保存token值
-                localStorage.setItem("token",data.token)  
-                this.$message.success(meta.msg)
+                localStorage.setItem("token",token)  
+                this.$message.success(msg)
                 this.$router.push({name:"home"})
             } else{
-                this.$message.warning(meta.msg);
+                this.$message.warning(msg);
             }
                   
         }

@@ -54,7 +54,7 @@
     </el-table>
     <!-- 4 分页-->
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" 
-    :current-page="pagenum" :page-sizes="[2, 4, 6, 8]" :page-size="2" 
+    :current-page="pageNum" :page-sizes="[2, 4, 6, 8]" :page-size="2" 
     layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
 </el-card>
@@ -67,9 +67,9 @@ export default {
             query: "",
             // 以下用于接受后台返回的数据
             userlist: [],
-            pagenum: 1,
-            pagesize: 2,
-            tatol: 32
+            pageNum: 1,
+            pageSize: 2,
+            total: 32
         }
 
     },
@@ -98,26 +98,18 @@ export default {
             const res = await this.$http.get(`users?query=${this.query}&pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
             //    console.log(res.data)
 
-            //    const {meta:{staus,msg},data:{users,total}}=res.data
-
-            // 以下5个为假数据
-            var status = 200
-            var users = res.data
-             var total1= 32
-             
-            var msg0 = "获取数据库失败"
-            var msg1 = "获取数据库成功"
-
+               const {meta:{status,msg},data:{users,total}}=res.data
+                //  console.log(msg,total,status,users)
             if (status === 200) {
                 //    1.给表格赋值
                 this.userlist = users
                 //  2 给total 赋值
-                this.total = total1
+                this.total =total
                 // 3提示
-                this.$message.success(msg1)
+                this.$message.success(msg)
             } else {
                 //    提示
-                this.$message.warning(msg0)
+                this.$message.warning(msg)
             }
         }
     },
