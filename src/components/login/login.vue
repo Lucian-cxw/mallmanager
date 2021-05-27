@@ -57,30 +57,18 @@ export default {
         async handleLogin(){
            const res = await this.$http.post("login",this.formdata)
             
-            // const {data,meta:{msg,status}}=res.data  
-           
-             class Data{
-                //  假数据，用来代替后台返回的token值
-                 constructor(token){
-                     this.token=token
-                 }
-             }
+            const {data,meta={msg,status}}=res.data
+            console.log(data,meta)
+            console.log(meta.msg)
+            console.log(meta.status)
 
-            var data=new Data()
-           data.token="00000"//假数据，用于测试，后台传递的值
-            // 说明，先造以下两假数据，他们本该来源于后台
-            data.msg1="登录成功，假数据" 
-            data.msg0="登录失败，假数据"    
-            var status=201
-
-            console.log(status,data.token)
-            if(status===201){
+            if(meta.status===201){
                 // 跳转页面前，下保存token值
-                localStorage.setItem("token",data.token)
+                localStorage.setItem("token",data.token)  
+                this.$message.success(meta.msg)
                 this.$router.push({name:"home"})
-                      this.$message.success(data.msg1)
             } else{
-                this.$message.warning(data.msg0);
+                this.$message.warning(meta.msg);
             }
                   
         }
