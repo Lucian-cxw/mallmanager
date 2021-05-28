@@ -58,7 +58,7 @@ export default {
            const res = await this.$http.post("login",this.formdata)
             
             const {data:{token},meta:{msg,status}}=res.data
-            
+            console.log(token)
 
             if(status===201){
                 // 跳转页面前，下保存token值

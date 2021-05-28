@@ -54,7 +54,7 @@
     </el-table>
     <!-- 4 分页-->
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" 
-    :current-page="pageNum" :page-sizes="[2, 4, 6, 8]" :page-size="2" 
+    :current-page="pageNum" :page-sizes="[2, 4, 6, 8]" :page-size="pageSize" 
     layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
 </el-card>
@@ -80,10 +80,14 @@ export default {
     methods: {
         // 分页相关的两个方法
         handleSizeChange(val) {
+            this.pageSize=val
             console.log(`每页 ${val} 条`);
+            this.getUserList()
         },
         handleCurrentChange(val) {
+            this.pageNum=val
             console.log(`当前页: ${val}`);
+            this.getUserList()
         },
         async getUserList() {
             /*
@@ -96,7 +100,7 @@ export default {
             const AUTH_TOKEN = localStorage.getItem("token")
             this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN
             const res = await this.$http.get(`users?query=${this.query}&pageNum=${this.pageNum}&pageSize=${this.pageSize}`)
-            //    console.log(res.data)
+               console.log(res.data)
 
                const {meta:{status,msg},data:{users,total}}=res.data
                 //  console.log(msg,total,status,users)
@@ -106,7 +110,8 @@ export default {
                 //  2 给total 赋值
                 this.total =total
                 // 3提示
-                this.$message.success(msg)
+                this.$message.success(msg) 
+                 console.log(this.total)
             } else {
                 //    提示
                 this.$message.warning(msg)
