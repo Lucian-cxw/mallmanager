@@ -75,6 +75,7 @@
             @click="showDeleteUserMsgBox(scope.row.id)"
           ></el-button>
           <el-button
+            @click="showSetUserRoleDia(scope.row)"
             size="mini"
             plain
             type="success"
@@ -137,6 +138,34 @@
       </div>
     </el-dialog>
 
+<!--分配角色对话框  -->
+<el-dialog title="分配角色" :visible.sync="dialogFormVisibleRol">
+  <el-form :model="form">
+    <el-form-item label="用户名" label-width="100px">
+   {{currUsername}} 
+    </el-form-item>
+    <el-form-item label="角色" label-width="100px">
+        {{currRoleId}}
+      <el-select v-model="currRoleId" >
+        <!--  value="-1" 表示值为-1 的字符串，通过：绑定后转为数字类型
+              补充，当select的绑定数据的值 和 option 的value一样，就会显示该option的lablel值
+              如 在data中，给currRoleId 赋值-1 name对于的option的label就显示 请选择
+        -->
+        <el-option label="请选择" :value="-1"></el-option>
+        <!-- 通过v-for 展示请求的数据 -->
+        <el-option 
+        :label="item.roleName" 
+        :value="item.id"
+          v-for="(item,i) in roles " :key="i"
+        ></el-option>
+      </el-select>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisibleRol = false">取 消</el-button>
+    <el-button type="primary" @click="setRoke()">确 定</el-button>
+  </div>
+</el-dialog>
   </el-card>
 </template>
 
@@ -154,6 +183,8 @@ export default {
       dialogFormVisibleAdd: false,
       // 编辑用户对话框 显示属性
       dialogFormVisibleEdit: false,
+      // 显示分配角色对话框
+      dialogFormVisibleRol:false,
       formLabelWidth: "100px",
       // 用户状态
       //   添加用户的表单数据
@@ -164,6 +195,13 @@ export default {
         email: "",
         mobile: "",
       },
+      currUsername:"",
+      // 用户角色
+      currRoleId:-1,
+      // 当前用户id
+      currUserId:-1,
+      // 保存用户角色分类
+      roles:[]
     };
   },
   created() {
@@ -171,6 +209,31 @@ export default {
     this.getUserList();
   },
   methods: {
+    // 分配角色，修改用户角色
+    async setRoke(){
+      // users/:id/role
+     const res=await this.$http.put(`users/${this.currUserId}/role`,{rid:this.currRoleId})
+      // console.log(res.data)
+      if(res.data.meta.status==200){
+        this.$message.success(res.data.meta.msg)
+      }
+      this.dialogFormVisibleRol=false
+    },
+    // 分配 角色显示
+    async showSetUserRoleDia(user){
+      this.currUsername=user.username
+      // 获取当前用户的id，将值传递给serRole（）方法，用于提交修改用户id
+      this.currUserId=user.id
+      //获取所有角色种类 请求路径roles
+      const res1= await this.$http.get(`roles`)
+      this.roles=res1.data
+      // console.log(this.roles)
+      // 获取用户角色 rid users/:id
+      const res= await this.$http.get(`users/${user.id}`)
+      this.currRoleId=res.data.rid
+      // 打开对话框
+      this.dialogFormVisibleRol=true 
+    },
     // 修改状态
    async changeMgState(user){
     //  1 mg_state =false 默认
